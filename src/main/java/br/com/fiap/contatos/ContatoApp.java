@@ -3,10 +3,9 @@ import br.com.fiap.contatos.dao.Conexao;
 import br.com.fiap.contatos.dao.ContatoDao;
 import br.com.fiap.contatos.model.Contato;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ContatoApp {
 
@@ -14,11 +13,49 @@ public class ContatoApp {
 
         // Criação do EntityManager
         EntityManager em = Conexao.getEntityManager();
-        cadastrar(em);
+        //cadastrar(em);
         //atualizar(em);
-        excluir(em);
+        //excluir(em);
+        //consultarContatoPorId(em);
+        //listarTodosContatos(em);
+        listarContatosPeloEmail(em);
 
     }
+
+    // procedimentos para listar contatos filtrando pelo email
+    public static void listarContatosPeloEmail(EntityManager em){
+
+        // Criar uma instância do Dao
+        ContatoDao contatoDao = new ContatoDao(em);
+
+        // procedimento de pesquisa
+        List<Contato> contatos = contatoDao.listarContatosPorEmail("jfjoaojf@hotmail.com");
+        em.close();
+        for(Contato contato: contatos){
+            System.out.println("----------------");
+            System.out.println(contato.toString());
+        }
+        System.out.println("----------------");
+        System.out.println("Fim dos registros.");
+    }
+
+    // procedimentos para listar todos os contatos
+    public static void listarTodosContatos(EntityManager em){
+
+        // Criar uma instância do Dao
+        ContatoDao contatoDao = new ContatoDao(em);
+
+        // procedimento de pesquisa
+        List<Contato> contatos = contatoDao.listarTodosContatos();
+        em.close();
+        for(Contato contato: contatos){
+            System.out.println("----------------");
+            System.out.println(contato.toString());
+        }
+        System.out.println("----------------");
+        System.out.println("Fim dos registros.");
+    }
+
 
     //procedimentos de cadastro
     public static void cadastrar(EntityManager em){
@@ -32,7 +69,7 @@ public class ContatoApp {
 
         // procedimentos cadastro
         em.getTransaction().begin();
-        contatoDao.salvar(contato);
+        contatoDao.salvarContato(contato);
         em.getTransaction().commit();
         em.close();
         System.out.println(contato);
@@ -50,7 +87,7 @@ public class ContatoApp {
 
         //procedimentos de atualização
         em.getTransaction().begin();
-        contatoDao.atualizar(contato);
+        contatoDao.atualizarContato(contato);
         em.getTransaction().commit();
         em.close();
         System.out.println(contato);
@@ -66,10 +103,22 @@ public class ContatoApp {
 
         //procedimentos para excluir
         em.getTransaction().begin();
-        contatoDao.excluir(contato);
+        contatoDao.excluirContato(contato);
         em.getTransaction().commit();
         em.close();
         System.out.println(contato);
+    }
+
+    public static void consultarContatoPorId(EntityManager em){
+
+        // Criar uma instância do Dao
+        ContatoDao contatoDao = new ContatoDao(em);
+
+        //procedimentos para consultar contato utilizand Id
+        em.getTransaction().begin();
+        contatoDao.consultarContatoPorId(2L);
+        em.getTransaction().commit();
+        em.close();
     }
 
 

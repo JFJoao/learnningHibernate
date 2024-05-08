@@ -9,7 +9,7 @@ public class Conexao {
     // Criação do EntityManager
     public static final EntityManagerFactory EMF = Persistence.createEntityManagerFactory("contatos");
 
-    //
+    // Retorna uma conexão para uso
     public static EntityManager getEntityManager(){
       return EMF.createEntityManager();
     }
